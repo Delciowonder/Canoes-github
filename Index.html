@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro com PDF no Android</title>
+
+  <!-- Biblioteca html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button {
+      width: 100%; padding: 10px; margin: 10px 0;
+      border-radius: 6px; border: 1px solid #aaa;
+      font-size: 16px;
+    }
+    button { background: #007bff; color: white; font-weight: bold; }
+    #comprovativo {
+      display: none;
+      padding: 20px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Cadastro</h2>
+
+  <input id="nome" placeholder="Nome" required>
+  <input id="email" placeholder="Email" required>
+  <input id="telefone" placeholder="Telefone" required>
+  <button onclick="gerarPDF()">Enviar</button>
+
+  <!-- Área oculta que será convertida em PDF -->
+  <div id="comprovativo">
+    <h2>Comprovativo de Cadastro</h2>
+    <p id="c_nome"></p>
+    <p id="c_email"></p>
+    <p id="c_tel"></p>
+  </div>
+
+  <script>
+    function gerarPDF() {
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+
+      if (!nome || !email || !telefone) {
+        alert("Preencha todos os campos");
+        return;
+      }
+
+      // preenchendo o comprovativo
+      document.getElementById("c_nome").innerText = "Nome: " + nome;
+      document.getElementById("c_email").innerText = "Email: " + email;
+      document.getElementById("c_tel").innerText = "Telefone: " + telefone;
+
+      const elemento = document.getElementById("comprovativo");
+      elemento.style.display = "block";
+
+      html2pdf().from(elemento).save("comprovativo.pdf");
+
+      // opcional: esconder depois
+      setTimeout(() => elemento.style.display = "none", 1000);
+    }
+  </script>
+
+</body>
+</html>
